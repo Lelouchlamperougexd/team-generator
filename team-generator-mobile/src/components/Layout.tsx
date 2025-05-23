@@ -54,7 +54,7 @@ export const Layout = ({ children, showSettingsButton = true }: LayoutProps) => 
             styles.teamSection,
             isLandscape && styles.landscapeTeamSection
           ]}>
-            <Team />
+            <Team team={[]} teamNumber={0} isTablet={false} isSmallScreen={false} />
           </View>
         </View>
       </ScrollView>
