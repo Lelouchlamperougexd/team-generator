@@ -46,6 +46,7 @@ export const translations = {
     feature2: 'Support for multiple languages',
     feature3: 'Dark and light theme support',
     feature4: 'Responsive design for all devices',
+    profile: 'Profile',
   },
   ru: {
     home: 'Главная',
@@ -94,6 +95,7 @@ export const translations = {
     feature2: 'Поддержка нескольких языков',
     feature3: 'Поддержка светлой и темной темы',
     feature4: 'Адаптивный дизайн для всех устройств',
+    profile: 'Профиль',
   },
   kk: {
     home: 'Басты бет',
@@ -142,5 +144,6 @@ export const translations = {
     feature2: 'Бірнеше тілдерді қолдау',
     feature3: 'Ашық және қараңғы тақырыпты қолдау',
     feature4: 'Барлық құрылғыларға бейімделген дизайн',
+    profile: 'Профиль',
   },
 }; 

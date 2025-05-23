@@ -4,6 +4,7 @@ import { useTheme } from '../theme/theme';
 import { useLocalization } from '../i18n/useLocalization';
 import { commonStyles } from '../theme/styles';
 import { Ionicons } from '@expo/vector-icons';
+import { GuestBanner } from '../components/GuestBanner';
 
 export const AboutScreen = () => {
   const theme = useTheme();
@@ -32,78 +33,81 @@ export const AboutScreen = () => {
   ];
 
   return (
-    <ScrollView 
-      style={[commonStyles.container, { backgroundColor: theme.background }]}
-      contentContainerStyle={[
-        commonStyles.content,
-        isTablet && commonStyles.contentTablet
-      ]}
-    >
-      <View style={[
-        commonStyles.card,
-        isTablet && commonStyles.cardTablet,
-        { backgroundColor: theme.cardBackground }
-      ]}>
-        <Text style={[
-          commonStyles.subtitle,
-          isTablet && commonStyles.subtitleTablet,
-          { color: theme.text }
+    <>
+      <GuestBanner />
+      <ScrollView 
+        style={[commonStyles.container, { backgroundColor: theme.background }]}
+        contentContainerStyle={[
+          commonStyles.content,
+          isTablet && commonStyles.contentTablet
+        ]}
+      >
+        <View style={[
+          commonStyles.card,
+          isTablet && commonStyles.cardTablet,
+          { backgroundColor: theme.cardBackground }
         ]}>
-          {t('aboutTitle')}
-        </Text>
-        <Text style={[
-          commonStyles.text,
-          isTablet && commonStyles.textTablet,
-          { color: theme.textSecondary }
-        ]}>
-          {t('aboutDescription')}
-        </Text>
-      </View>
+          <Text style={[
+            commonStyles.subtitle,
+            isTablet && commonStyles.subtitleTablet,
+            { color: theme.text }
+          ]}>
+            {t('aboutTitle')}
+          </Text>
+          <Text style={[
+            commonStyles.text,
+            isTablet && commonStyles.textTablet,
+            { color: theme.textSecondary }
+          ]}>
+            {t('aboutDescription')}
+          </Text>
+        </View>
 
-      <View style={[
-        styles.featuresContainer,
-        isTablet && styles.featuresContainerTablet
-      ]}>
-        {features.map((feature, index) => (
-          <View
-            key={index}
-            style={[
-              commonStyles.card,
-              isTablet && commonStyles.cardTablet,
-              { backgroundColor: theme.cardBackground }
-            ]}
-          >
-            <Ionicons 
-              name={feature.icon} 
-              size={isTablet ? 32 : 24} 
-              color={theme.primary} 
-            />
-            <Text style={[
-              commonStyles.text,
-              isTablet && commonStyles.textTablet,
-              isSmallScreen && styles.featureTextSmall,
-              { color: theme.text }
-            ]}>
-              {feature.title}
-            </Text>
-          </View>
-        ))}
-      </View>
-
-      <View style={[
-        commonStyles.card,
-        isTablet && commonStyles.cardTablet,
-        { backgroundColor: theme.cardBackground }
-      ]}>
-        <Text style={[
-          commonStyles.text,
-          isTablet && commonStyles.textTablet,
-          { color: theme.textSecondary }
+        <View style={[
+          styles.featuresContainer,
+          isTablet && styles.featuresContainerTablet
         ]}>
-          {t('version')}: 1.0.0
-        </Text>
-      </View>
-    </ScrollView>
+          {features.map((feature, index) => (
+            <View
+              key={index}
+              style={[
+                commonStyles.card,
+                isTablet && commonStyles.cardTablet,
+                { backgroundColor: theme.cardBackground }
+              ]}
+            >
+              <Ionicons 
+                name={feature.icon} 
+                size={isTablet ? 32 : 24} 
+                color={theme.primary} 
+              />
+              <Text style={[
+                commonStyles.text,
+                isTablet && commonStyles.textTablet,
+                isSmallScreen && styles.featureTextSmall,
+                { color: theme.text }
+              ]}>
+                {feature.title}
+              </Text>
+            </View>
+          ))}
+        </View>
+
+        <View style={[
+          commonStyles.card,
+          isTablet && commonStyles.cardTablet,
+          { backgroundColor: theme.cardBackground }
+        ]}>
+          <Text style={[
+            commonStyles.text,
+            isTablet && commonStyles.textTablet,
+            { color: theme.textSecondary }
+          ]}>
+            {t('version')}: 1.0.0
+          </Text>
+        </View>
+      </ScrollView>
+    </>
   );
 };
 

@@ -5,16 +5,19 @@ import { HomeScreen } from '../screens/HomeScreen';
 import { TeamGeneratorScreen } from '../screens/TeamGeneratorScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 import { AboutScreen } from '../screens/AboutScreen';
+import { ProfileScreen } from '../screens/ProfileScreen';
 import { useTheme } from '../theme/theme';
 import { useLocalization } from '../i18n/useLocalization';
 import { Ionicons } from '@expo/vector-icons';
 import { Platform } from 'react-native';
+import { useAuth } from '../auth/AuthContext';
 
 const Drawer = createDrawerNavigator();
 
 export const AppNavigator = () => {
   const theme = useTheme();
   const { t } = useLocalization();
+  const { user, isGuest } = useAuth();
 
   return (
     <NavigationContainer>
@@ -60,16 +63,30 @@ export const AppNavigator = () => {
             ),
           }}
         />
-        <Drawer.Screen 
-          name="Settings" 
-          component={SettingsScreen}
-          options={{
-            title: t('settings'),
-            drawerIcon: ({ color, size }) => (
-              <Ionicons name="settings-outline" size={size} color={color} />
-            ),
-          }}
-        />
+        {!isGuest && user && (
+          <Drawer.Screen 
+            name="Profile" 
+            component={ProfileScreen}
+            options={{
+              title: t('profile') ? t('profile') : 'Profile',
+              drawerIcon: ({ color, size }) => (
+                <Ionicons name="person-outline" size={size} color={color} />
+              ),
+            }}
+          />
+        )}
+        {!isGuest && (
+          <Drawer.Screen 
+            name="Settings" 
+            component={SettingsScreen}
+            options={{
+              title: t('settings'),
+              drawerIcon: ({ color, size }) => (
+                <Ionicons name="settings-outline" size={size} color={color} />
+              ),
+            }}
+          />
+        )}
         <Drawer.Screen 
           name="About" 
           component={AboutScreen}

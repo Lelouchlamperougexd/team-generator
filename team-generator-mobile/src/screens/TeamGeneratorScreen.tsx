@@ -16,6 +16,7 @@ import { Team } from '../components/Team';
 import { Ionicons } from '@expo/vector-icons';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { RootStackParamList } from '../navigation/types';
+import { GuestBanner } from '../components/GuestBanner';
 
 type TeamGeneratorScreenProps = {
   navigation: DrawerNavigationProp<RootStackParamList, 'TeamGenerator'>;
@@ -71,182 +72,15 @@ export const TeamGeneratorScreen = ({ navigation }: TeamGeneratorScreenProps) =>
   };
 
   return (
-    <ScrollView 
-      style={[commonStyles.container, { backgroundColor: theme.background }]}
-      contentContainerStyle={[
-        commonStyles.content,
-        isTablet && commonStyles.contentTablet
-      ]}
-    >
-      <View style={[
-        commonStyles.card,
-        isTablet && commonStyles.cardTablet,
-        { backgroundColor: theme.cardBackground }
-      ]}>
-        <Text style={[
-          commonStyles.subtitle,
-          isTablet && commonStyles.subtitleTablet,
-          { color: theme.text }
-        ]}>
-          {t('teamMembers')}
-        </Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={[
-              commonStyles.input,
-              isTablet && commonStyles.inputTablet,
-              { 
-                backgroundColor: theme.inputBackground,
-                color: theme.text,
-                borderColor: theme.border
-              }
-            ]}
-            placeholder={t('enterName')}
-            placeholderTextColor={theme.textSecondary}
-            value={inputValue}
-            onChangeText={setInputValue}
-            onSubmitEditing={handleAddName}
-          />
-          <TouchableOpacity
-            style={[
-              commonStyles.button,
-              isTablet && commonStyles.buttonTablet,
-              { backgroundColor: theme.primary }
-            ]}
-            onPress={handleAddName}
-          >
-            <Text style={[
-              commonStyles.text,
-              isTablet && commonStyles.textTablet,
-              { color: theme.buttonText }
-            ]}>
-              {t('add')}
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.namesList}>
-          {names.map((name, index) => (
-            <View
-              key={index}
-              style={[
-                styles.nameItem,
-                { backgroundColor: theme.inputBackground }
-              ]}
-            >
-              <Text style={[
-                commonStyles.text,
-                isTablet && commonStyles.textTablet,
-                isSmallScreen && styles.nameTextSmall,
-                { color: theme.text }
-              ]}>
-                {name}
-              </Text>
-              <TouchableOpacity
-                onPress={() => handleRemoveName(index)}
-                style={styles.removeButton}
-              >
-                <Ionicons name="close-circle" size={20} color={theme.error} />
-              </TouchableOpacity>
-            </View>
-          ))}
-        </View>
-      </View>
-
-      <View style={[
-        commonStyles.card,
-        isTablet && commonStyles.cardTablet,
-        { backgroundColor: theme.cardBackground }
-      ]}>
-        <Text style={[
-          commonStyles.subtitle,
-          isTablet && commonStyles.subtitleTablet,
-          { color: theme.text }
-        ]}>
-          {t('numberOfTeams')}
-        </Text>
-        <View style={styles.teamsInputContainer}>
-          <TouchableOpacity
-            style={[
-              commonStyles.button,
-              isTablet && commonStyles.buttonTablet,
-              { backgroundColor: theme.primary }
-            ]}
-            onPress={() => setNumberOfTeams(Math.max(2, numberOfTeams - 1))}
-          >
-            <Text style={[
-              commonStyles.text,
-              isTablet && commonStyles.textTablet,
-              { color: theme.buttonText }
-            ]}>
-              -
-            </Text>
-          </TouchableOpacity>
-          <Text style={[
-            commonStyles.text,
-            isTablet && commonStyles.textTablet,
-            { color: theme.text }
-          ]}>
-            {numberOfTeams}
-          </Text>
-          <TouchableOpacity
-            style={[
-              commonStyles.button,
-              isTablet && commonStyles.buttonTablet,
-              { backgroundColor: theme.primary }
-            ]}
-            onPress={() => setNumberOfTeams(Math.min(names.length, numberOfTeams + 1))}
-          >
-            <Text style={[
-              commonStyles.text,
-              isTablet && commonStyles.textTablet,
-              { color: theme.buttonText }
-            ]}>
-              +
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <View style={[
-        styles.buttonsContainer,
-        isTablet && styles.buttonsContainerTablet
-      ]}>
-        <TouchableOpacity
-          style={[
-            commonStyles.button,
-            isTablet && commonStyles.buttonTablet,
-            { backgroundColor: theme.primary }
-          ]}
-          onPress={handleGenerateTeams}
-        >
-          <Text style={[
-            commonStyles.text,
-            isTablet && commonStyles.textTablet,
-            { color: theme.buttonText }
-          ]}>
-            {t('generateTeams')}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            commonStyles.button,
-            isTablet && commonStyles.buttonTablet,
-            { backgroundColor: theme.error }
-          ]}
-          onPress={handleClearAll}
-        >
-          <Text style={[
-            commonStyles.text,
-            isTablet && commonStyles.textTablet,
-            { color: theme.buttonText }
-          ]}>
-            {t('clearAll')}
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      {teams.length > 0 ? (
+    <>
+      <GuestBanner />
+      <ScrollView 
+        style={[commonStyles.container, { backgroundColor: theme.background }]}
+        contentContainerStyle={[
+          commonStyles.content,
+          isTablet && commonStyles.contentTablet
+        ]}
+      >
         <View style={[
           commonStyles.card,
           isTablet && commonStyles.cardTablet,
@@ -257,39 +91,209 @@ export const TeamGeneratorScreen = ({ navigation }: TeamGeneratorScreenProps) =>
             isTablet && commonStyles.subtitleTablet,
             { color: theme.text }
           ]}>
-            {t('teams')}
+            {t('teamMembers')}
           </Text>
-          <View style={[
-            commonStyles.gridContainer,
-            isTablet && commonStyles.gridContainerTablet
-          ]}>
-            {teams.map((team, index) => (
-              <Team
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={[
+                commonStyles.input,
+                isTablet && commonStyles.inputTablet,
+                { 
+                  backgroundColor: theme.inputBackground,
+                  color: theme.text,
+                  borderColor: theme.border
+                }
+              ]}
+              placeholder={t('enterName')}
+              placeholderTextColor={theme.textSecondary}
+              value={inputValue}
+              onChangeText={setInputValue}
+              onSubmitEditing={handleAddName}
+            />
+            <TouchableOpacity
+              style={[
+                commonStyles.button,
+                isTablet && commonStyles.buttonTablet,
+                { backgroundColor: theme.primary }
+              ]}
+              onPress={handleAddName}
+            >
+              <Text style={[
+                commonStyles.text,
+                isTablet && commonStyles.textTablet,
+                { color: theme.buttonText }
+              ]}>
+                {t('add')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.namesList}>
+            {names.map((name, index) => (
+              <View
                 key={index}
-                team={team}
-                teamNumber={index + 1}
-                isTablet={isTablet}
-                isSmallScreen={isSmallScreen}
-              />
+                style={[
+                  styles.nameItem,
+                  { backgroundColor: theme.inputBackground }
+                ]}
+              >
+                <Text style={[
+                  commonStyles.text,
+                  isTablet && commonStyles.textTablet,
+                  isSmallScreen && styles.nameTextSmall,
+                  { color: theme.text }
+                ]}>
+                  {name}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => handleRemoveName(index)}
+                  style={styles.removeButton}
+                >
+                  <Ionicons name="close-circle" size={20} color={theme.error} />
+                </TouchableOpacity>
+              </View>
             ))}
           </View>
         </View>
-      ) : (
+
         <View style={[
           commonStyles.card,
           isTablet && commonStyles.cardTablet,
           { backgroundColor: theme.cardBackground }
         ]}>
           <Text style={[
-            commonStyles.text,
-            isTablet && commonStyles.textTablet,
-            { color: theme.textSecondary }
+            commonStyles.subtitle,
+            isTablet && commonStyles.subtitleTablet,
+            { color: theme.text }
           ]}>
-            {t('noTeams')}
+            {t('numberOfTeams')}
           </Text>
+          <View style={styles.teamsInputContainer}>
+            <TouchableOpacity
+              style={[
+                commonStyles.button,
+                isTablet && commonStyles.buttonTablet,
+                { backgroundColor: theme.primary }
+              ]}
+              onPress={() => setNumberOfTeams(Math.max(2, numberOfTeams - 1))}
+            >
+              <Text style={[
+                commonStyles.text,
+                isTablet && commonStyles.textTablet,
+                { color: theme.buttonText }
+              ]}>
+                -
+              </Text>
+            </TouchableOpacity>
+            <Text style={[
+              commonStyles.text,
+              isTablet && commonStyles.textTablet,
+              { color: theme.text }
+            ]}>
+              {numberOfTeams}
+            </Text>
+            <TouchableOpacity
+              style={[
+                commonStyles.button,
+                isTablet && commonStyles.buttonTablet,
+                { backgroundColor: theme.primary }
+              ]}
+              onPress={() => setNumberOfTeams(Math.min(names.length, numberOfTeams + 1))}
+            >
+              <Text style={[
+                commonStyles.text,
+                isTablet && commonStyles.textTablet,
+                { color: theme.buttonText }
+              ]}>
+                +
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      )}
-    </ScrollView>
+
+        <View style={[
+          styles.buttonsContainer,
+          isTablet && styles.buttonsContainerTablet
+        ]}>
+          <TouchableOpacity
+            style={[
+              commonStyles.button,
+              isTablet && commonStyles.buttonTablet,
+              { backgroundColor: theme.primary }
+            ]}
+            onPress={handleGenerateTeams}
+          >
+            <Text style={[
+              commonStyles.text,
+              isTablet && commonStyles.textTablet,
+              { color: theme.buttonText }
+            ]}>
+              {t('generateTeams')}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              commonStyles.button,
+              isTablet && commonStyles.buttonTablet,
+              { backgroundColor: theme.error }
+            ]}
+            onPress={handleClearAll}
+          >
+            <Text style={[
+              commonStyles.text,
+              isTablet && commonStyles.textTablet,
+              { color: theme.buttonText }
+            ]}>
+              {t('clearAll')}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {teams.length > 0 ? (
+          <View style={[
+            commonStyles.card,
+            isTablet && commonStyles.cardTablet,
+            { backgroundColor: theme.cardBackground }
+          ]}>
+            <Text style={[
+              commonStyles.subtitle,
+              isTablet && commonStyles.subtitleTablet,
+              { color: theme.text }
+            ]}>
+              {t('teams')}
+            </Text>
+            <View style={[
+              commonStyles.gridContainer,
+              isTablet && commonStyles.gridContainerTablet
+            ]}>
+              {teams.map((team, index) => (
+                <Team
+                  key={index}
+                  team={team}
+                  teamNumber={index + 1}
+                  isTablet={isTablet}
+                  isSmallScreen={isSmallScreen}
+                />
+              ))}
+            </View>
+          </View>
+        ) : (
+          <View style={[
+            commonStyles.card,
+            isTablet && commonStyles.cardTablet,
+            { backgroundColor: theme.cardBackground }
+          ]}>
+            <Text style={[
+              commonStyles.text,
+              isTablet && commonStyles.textTablet,
+              { color: theme.textSecondary }
+            ]}>
+              {t('noTeams')}
+            </Text>
+          </View>
+        )}
+      </ScrollView>
+    </>
   );
 };
 

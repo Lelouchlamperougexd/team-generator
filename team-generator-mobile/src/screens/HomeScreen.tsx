@@ -6,6 +6,7 @@ import { commonStyles } from '../theme/styles';
 import { Ionicons } from '@expo/vector-icons';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { RootStackParamList } from '../navigation/types';
+import { GuestBanner } from '../components/GuestBanner';
 
 type HomeScreenProps = {
   navigation: DrawerNavigationProp<RootStackParamList, 'Home'>;
@@ -37,65 +38,68 @@ export const HomeScreen = ({ navigation }: HomeScreenProps) => {
   ];
 
   return (
-    <ScrollView 
-      style={[commonStyles.container, { backgroundColor: theme.background }]}
-      contentContainerStyle={[
-        commonStyles.content,
-        isTablet && commonStyles.contentTablet
-      ]}
-    >
-      <View style={[
-        commonStyles.card,
-        isTablet && commonStyles.cardTablet,
-        { backgroundColor: theme.cardBackground }
-      ]}>
-        <Text style={[
-          commonStyles.subtitle,
-          isTablet && commonStyles.subtitleTablet,
-          { color: theme.text }
+    <>
+      <GuestBanner />
+      <ScrollView 
+        style={[commonStyles.container, { backgroundColor: theme.background }]}
+        contentContainerStyle={[
+          commonStyles.content,
+          isTablet && commonStyles.contentTablet
+        ]}
+      >
+        <View style={[
+          commonStyles.card,
+          isTablet && commonStyles.cardTablet,
+          { backgroundColor: theme.cardBackground }
         ]}>
-          {t('welcome')}
-        </Text>
-        <Text style={[
-          commonStyles.text,
-          isTablet && commonStyles.textTablet,
-          { color: theme.textSecondary }
-        ]}>
-          {t('welcomeDesc')}
-        </Text>
-      </View>
+          <Text style={[
+            commonStyles.subtitle,
+            isTablet && commonStyles.subtitleTablet,
+            { color: theme.text }
+          ]}>
+            {t('welcome')}
+          </Text>
+          <Text style={[
+            commonStyles.text,
+            isTablet && commonStyles.textTablet,
+            { color: theme.textSecondary }
+          ]}>
+            {t('welcomeDesc')}
+          </Text>
+        </View>
 
-      <View style={[
-        styles.featuresContainer,
-        isTablet && styles.featuresContainerTablet
-      ]}>
-        {features.map((feature, index) => (
-          <TouchableOpacity
-            key={index}
-            style={[
-              commonStyles.card,
-              isTablet && commonStyles.cardTablet,
-              { backgroundColor: theme.cardBackground }
-            ]}
-            onPress={() => navigation.navigate(feature.screen)}
-          >
-            <Ionicons 
-              name={feature.icon} 
-              size={isTablet ? 32 : 24} 
-              color={theme.primary} 
-            />
-            <Text style={[
-              commonStyles.text,
-              isTablet && commonStyles.textTablet,
-              isSmallScreen && styles.featureTextSmall,
-              { color: theme.text }
-            ]}>
-              {feature.title}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </ScrollView>
+        <View style={[
+          styles.featuresContainer,
+          isTablet && styles.featuresContainerTablet
+        ]}>
+          {features.map((feature, index) => (
+            <TouchableOpacity
+              key={index}
+              style={[
+                commonStyles.card,
+                isTablet && commonStyles.cardTablet,
+                { backgroundColor: theme.cardBackground }
+              ]}
+              onPress={() => navigation.navigate(feature.screen)}
+            >
+              <Ionicons 
+                name={feature.icon} 
+                size={isTablet ? 32 : 24} 
+                color={theme.primary} 
+              />
+              <Text style={[
+                commonStyles.text,
+                isTablet && commonStyles.textTablet,
+                isSmallScreen && styles.featureTextSmall,
+                { color: theme.text }
+              ]}>
+                {feature.title}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </ScrollView>
+    </>
   );
 };
 

@@ -4,6 +4,7 @@ import { useTheme } from '../theme/theme';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useLocalization } from '../i18n/useLocalization';
 import { commonStyles } from '../theme/styles';
+import { GuestBanner } from '../components/GuestBanner';
 
 export const SettingsScreen = () => {
   const theme = useTheme();
@@ -20,86 +21,89 @@ export const SettingsScreen = () => {
   ] as const;
 
   return (
-    <ScrollView 
-      style={[commonStyles.container, { backgroundColor: theme.background }]}
-      contentContainerStyle={[
-        commonStyles.content,
-        isTablet && commonStyles.contentTablet
-      ]}
-    >
-      <View style={[
-        commonStyles.card,
-        isTablet && commonStyles.cardTablet,
-        { backgroundColor: theme.cardBackground }
-      ]}>
-        <Text style={[
-          commonStyles.subtitle,
-          isTablet && commonStyles.subtitleTablet,
-          { color: theme.text }
-        ]}>
-          {t('theme')}
-        </Text>
+    <>
+      <GuestBanner />
+      <ScrollView 
+        style={[commonStyles.container, { backgroundColor: theme.background }]}
+        contentContainerStyle={[
+          commonStyles.content,
+          isTablet && commonStyles.contentTablet
+        ]}
+      >
         <View style={[
-          styles.settingItem,
-          { borderBottomColor: theme.border }
+          commonStyles.card,
+          isTablet && commonStyles.cardTablet,
+          { backgroundColor: theme.cardBackground }
         ]}>
           <Text style={[
-            commonStyles.text,
-            isTablet && commonStyles.textTablet,
+            commonStyles.subtitle,
+            isTablet && commonStyles.subtitleTablet,
             { color: theme.text }
           ]}>
-            {t('darkTheme')}
+            {t('theme')}
           </Text>
-          <Switch
-            value={themeMode === 'dark'}
-            onValueChange={(value) => setThemeMode(value ? 'dark' : 'light')}
-            trackColor={{ false: '#767577', true: theme.primary }}
-            thumbColor={themeMode === 'dark' ? theme.primary : '#f4f3f4'}
-          />
+          <View style={[
+            styles.settingItem,
+            { borderBottomColor: theme.border }
+          ]}>
+            <Text style={[
+              commonStyles.text,
+              isTablet && commonStyles.textTablet,
+              { color: theme.text }
+            ]}>
+              {t('darkTheme')}
+            </Text>
+            <Switch
+              value={themeMode === 'dark'}
+              onValueChange={(value) => setThemeMode(value ? 'dark' : 'light')}
+              trackColor={{ false: '#767577', true: theme.primary }}
+              thumbColor={themeMode === 'dark' ? theme.primary : '#f4f3f4'}
+            />
+          </View>
         </View>
-      </View>
 
-      <View style={[
-        commonStyles.card,
-        isTablet && commonStyles.cardTablet,
-        { backgroundColor: theme.cardBackground }
-      ]}>
-        <Text style={[
-          commonStyles.subtitle,
-          isTablet && commonStyles.subtitleTablet,
-          { color: theme.text }
-        ]}>
-          {t('language')}
-        </Text>
         <View style={[
-          styles.languageOptions,
-          isTablet && styles.languageOptionsTablet
+          commonStyles.card,
+          isTablet && commonStyles.cardTablet,
+          { backgroundColor: theme.cardBackground }
         ]}>
-          {languages.map((lang) => (
-            <TouchableOpacity
-              key={lang.code}
-              style={[
-                styles.languageOption,
-                { backgroundColor: language === lang.code ? theme.primary : 'transparent' },
-                isSmallScreen && styles.languageOptionSmall
-              ]}
-              onPress={() => setLanguage(lang.code)}
-            >
-              <Text
+          <Text style={[
+            commonStyles.subtitle,
+            isTablet && commonStyles.subtitleTablet,
+            { color: theme.text }
+          ]}>
+            {t('language')}
+          </Text>
+          <View style={[
+            styles.languageOptions,
+            isTablet && styles.languageOptionsTablet
+          ]}>
+            {languages.map((lang) => (
+              <TouchableOpacity
+                key={lang.code}
                 style={[
-                  commonStyles.text,
-                  isTablet && commonStyles.textTablet,
-                  isSmallScreen && styles.languageTextSmall,
-                  { color: language === lang.code ? '#FFFFFF' : theme.text }
+                  styles.languageOption,
+                  { backgroundColor: language === lang.code ? theme.primary : 'transparent' },
+                  isSmallScreen && styles.languageOptionSmall
                 ]}
+                onPress={() => setLanguage(lang.code)}
               >
-                {lang.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
+                <Text
+                  style={[
+                    commonStyles.text,
+                    isTablet && commonStyles.textTablet,
+                    isSmallScreen && styles.languageTextSmall,
+                    { color: language === lang.code ? '#FFFFFF' : theme.text }
+                  ]}
+                >
+                  {lang.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 };
 
