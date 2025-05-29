@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { useAuth } from '../auth/AuthContext';
 import { useTheme } from '../theme/theme';
 import { useNetworkStatus } from '../context/NetworkStatusContext';
@@ -7,12 +7,16 @@ import { useNetworkStatus } from '../context/NetworkStatusContext';
 export const LoginScreen = ({ onGoToRegister }: { onGoToRegister: () => void }) => {
   const { login, enterGuestMode } = useAuth();
   const theme = useTheme();
-  const { isConnected } = useNetworkStatus();
+  const { isOnline } = useNetworkStatus();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please enter both email and password.');
+      return;
+    }
     setLoading(true);
     try {
       await login(email, password);
@@ -26,7 +30,7 @@ export const LoginScreen = ({ onGoToRegister }: { onGoToRegister: () => void }) 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}> 
       <Text style={[styles.title, { color: theme.text }]}>Login</Text>
-      {!isConnected && (
+      {!isOnline && (
         <Text style={{ color: theme.error, marginBottom: 16 }}>You are offline. Login and registration are disabled.</Text>
       )}
       <TextInput
@@ -46,10 +50,10 @@ export const LoginScreen = ({ onGoToRegister }: { onGoToRegister: () => void }) 
         value={password}
         onChangeText={setPassword}
       />
-      <TouchableOpacity style={[styles.button, { backgroundColor: theme.primary }]} onPress={handleLogin} disabled={loading || !isConnected}>
-        <Text style={styles.buttonText}>Login</Text>
+      <TouchableOpacity style={[styles.button, { backgroundColor: theme.primary }]} onPress={handleLogin} disabled={loading || !isOnline}>
+        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Login</Text>}
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, { backgroundColor: theme.cardBackground, marginTop: 8 }]} onPress={onGoToRegister} disabled={!isConnected}>
+      <TouchableOpacity style={[styles.button, { backgroundColor: theme.cardBackground, marginTop: 8 }]} onPress={onGoToRegister} disabled={!isOnline}>
         <Text style={[styles.buttonText, { color: theme.primary }]}>Don't have an account? Register</Text>
       </TouchableOpacity>
       <TouchableOpacity style={[styles.button, { backgroundColor: theme.error, marginTop: 24 }]} onPress={enterGuestMode}>

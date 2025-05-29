@@ -1,22 +1,22 @@
 import { initializeApp } from 'firebase/app';
+import { getDatabase } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
 import { getAnalytics } from 'firebase/analytics';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDdAUSVOvbZ3XMI3nfXxsw5NOlVLVbucAk",
-  authDomain: "random-team-generator-app.firebaseapp.com",
-  projectId: "random-team-generator-app",
-  storageBucket: "random-team-generator-app.appspot.com",
-  messagingSenderId: "118348318648",
-  appId: "1:118348318648:web:dc7cc6a8cc10714dc1314d"
+  apiKey: "AIzaSyBmRjkN3ywG-8hajBw8PV60aaqRIa6vGX8",
+  authDomain: "rangdom.firebaseapp.com",
+  projectId: "rangdom",
+  storageBucket: "rangdom.appspot.com",
+  messagingSenderId: "351207761101",
+  appId: "1:351207761101:web:5054e8b2810d930763f584",
 };
 
 const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 const auth = getAuth(app);
-const db = getFirestore(app);
-let analytics;
 
+let analytics;
 if (typeof window !== 'undefined') {
   analytics = getAnalytics(app);
 }

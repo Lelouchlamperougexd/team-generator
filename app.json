@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "5f7e2fc4-fcd2-4c48-a842-584b1371d80f"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.richmuse.teamgenerator",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    }
+  }
+}

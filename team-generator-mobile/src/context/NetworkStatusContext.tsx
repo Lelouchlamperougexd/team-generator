@@ -1,28 +1,35 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import NetInfo from '@react-native-community/netinfo';
+import React, { createContext, useState, useEffect, ReactNode, useContext } from 'react';
 
-interface NetworkStatusContextType {
-  isConnected: boolean;
+interface NetworkStatusContextProps {
+  isOnline: boolean;
 }
 
-const NetworkStatusContext = createContext<NetworkStatusContextType>({ isConnected: true });
+export const NetworkStatusContext = createContext<NetworkStatusContextProps>({ isOnline: true });
 
-export const NetworkStatusProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isConnected, setIsConnected] = useState(true);
+export const NetworkStatusProvider = ({ children }: { children: ReactNode }) => {
+  const [isOnline, setIsOnline] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener(state => {
-      setIsConnected(!!state.isConnected);
-    });
-    NetInfo.fetch().then(state => setIsConnected(!!state.isConnected));
-    return () => unsubscribe();
+    const updateOnlineStatus = () => setIsOnline(navigator.onLine);
+
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+
+    updateOnlineStatus();
+
+    return () => {
+      window.removeEventListener('online', updateOnlineStatus);
+      window.removeEventListener('offline', updateOnlineStatus);
+    };
   }, []);
 
   return (
-    <NetworkStatusContext.Provider value={{ isConnected }}>
+    <NetworkStatusContext.Provider value={{ isOnline }}>
       {children}
     </NetworkStatusContext.Provider>
   );
 };
 
-export const useNetworkStatus = () => useContext(NetworkStatusContext); 
+export const useNetworkStatus = () => useContext(NetworkStatusContext);
+
+export { NetworkStatusContext, NetworkStatusProvider };
