@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert, useWindowDimensions } from 'react-native';
 import { useAuth } from '../auth/AuthContext';
 import { useSettingsStore } from '../store/useSettingsStore';
 import { useTheme } from '../theme/theme';
 import { commonStyles } from '../theme/styles';
 import { GuestBanner } from '../components/GuestBanner';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { db } from '../firebase/config';
+import { ref, get } from 'firebase/database';
+import { useNetworkStatus } from '../context/NetworkStatusContext';
 
 export const ProfileScreen = () => {
   const { user, logout, updateUserPreferences, isGuest } = useAuth();
@@ -14,12 +18,50 @@ export const ProfileScreen = () => {
   const isTablet = width >= 768;
   const isSmallScreen = width < 360;
   const [loading, setLoading] = useState(false);
+  const [entryCount, setEntryCount] = useState<number>(0);
+  const { isOnline } = useNetworkStatus();
 
   const languages = [
     { code: 'en', label: 'English' },
     { code: 'ru', label: 'Русский' },
     { code: 'kk', label: 'Қазақша' },
   ];
+
+  useEffect(() => {
+    const fetchEntryCount = async () => {
+      if (isGuest || !user) {
+        setEntryCount(0);
+        return;
+      }
+      if (isOnline) {
+        // Fetch from Firebase
+        const teamsRef = ref(db, `users/${user.uid}/teams`);
+        const snapshot = await get(teamsRef);
+        const data = snapshot.val();
+        if (data && data.teams) {
+          setEntryCount(Array.isArray(data.teams) ? data.teams.length : Object.keys(data.teams).length);
+        } else {
+          setEntryCount(0);
+        }
+      } else {
+        // Fetch from AsyncStorage
+        const local = await AsyncStorage.getItem('teamState');
+        if (local) {
+          const parsed = JSON.parse(local);
+          if (parsed && parsed.history) {
+            setEntryCount(parsed.history.length);
+          } else if (parsed && parsed.teams) {
+            setEntryCount(parsed.teams.length);
+          } else {
+            setEntryCount(0);
+          }
+        } else {
+          setEntryCount(0);
+        }
+      }
+    };
+    fetchEntryCount();
+  }, [isGuest, user, isOnline]);
 
   const handleThemeChange = async (mode: 'light' | 'dark') => {
     setThemeMode(mode);
@@ -58,6 +100,7 @@ export const ProfileScreen = () => {
           ) : (
             <>
               <Text style={[commonStyles.text, { color: theme.textSecondary, marginBottom: 16 }]}>Email: {user?.email}</Text>
+              <Text style={[commonStyles.text, { color: theme.textSecondary, marginBottom: 16 }]}>Saved Teams: {entryCount}</Text>
               <Text style={[commonStyles.text, { color: theme.text, marginBottom: 8 }]}>Theme</Text>
               <View style={{ flexDirection: 'row', gap: 12, marginBottom: 16 }}>
                 <TouchableOpacity

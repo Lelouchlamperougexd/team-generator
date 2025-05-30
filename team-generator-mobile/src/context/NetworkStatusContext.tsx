@@ -31,5 +31,3 @@ export const NetworkStatusProvider = ({ children }: { children: ReactNode }) => 
 };
 
 export const useNetworkStatus = () => useContext(NetworkStatusContext);
-
-export { NetworkStatusContext, NetworkStatusProvider };

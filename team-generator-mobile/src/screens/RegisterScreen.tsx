@@ -3,11 +3,14 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityInd
 import { useAuth } from '../auth/AuthContext';
 import { useTheme } from '../theme/theme';
 import { useNetworkStatus } from '../context/NetworkStatusContext';
+import { useLocalization } from '../i18n/useLocalization';
+import { commonStyles } from '../theme/styles';
 
 export const RegisterScreen = ({ onGoToLogin }: { onGoToLogin: () => void }) => {
   const { register } = useAuth();
   const theme = useTheme();
   const { isOnline } = useNetworkStatus();
+  const { t } = useLocalization();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -16,46 +19,46 @@ export const RegisterScreen = ({ onGoToLogin }: { onGoToLogin: () => void }) => 
 
   const handleRegister = async () => {
     if (!email || !password || !name || !surname) {
-      Alert.alert('Error', 'Please fill in all fields.');
+      Alert.alert(t('error'), t('fillAllFields'));
       return;
     }
     if (password.length < 6) {
-      Alert.alert('Error', 'Password must be at least 6 characters.');
+      Alert.alert(t('error'), t('passwordMinLength'));
       return;
     }
     setLoading(true);
     try {
       await register(email, password, name, surname);
     } catch (e: any) {
-      Alert.alert('Registration Error', e.message);
+      Alert.alert(t('registrationError'), e.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.background }]}> 
-      <Text style={[styles.title, { color: theme.text }]}>Register</Text>
+    <View style={[commonStyles.container, { backgroundColor: theme.background, justifyContent: 'center', alignItems: 'center', padding: 24 }]}> 
+      <Text style={[styles.title, { color: theme.text }]}>{t('register')}</Text>
       {!isOnline && (
-        <Text style={{ color: theme.error, marginBottom: 16 }}>You are offline. Registration is disabled.</Text>
+        <Text style={{ color: theme.error, marginBottom: 16 }}>{t('offlineRegistrationDisabled')}</Text>
       )}
       <TextInput
         style={[styles.input, { color: theme.text, borderColor: theme.border, backgroundColor: theme.inputBackground }]}
-        placeholder="Name"
+        placeholder={t('name')}
         placeholderTextColor={theme.textSecondary}
         value={name}
         onChangeText={setName}
       />
       <TextInput
         style={[styles.input, { color: theme.text, borderColor: theme.border, backgroundColor: theme.inputBackground }]}
-        placeholder="Surname"
+        placeholder={t('surname')}
         placeholderTextColor={theme.textSecondary}
         value={surname}
         onChangeText={setSurname}
       />
       <TextInput
         style={[styles.input, { color: theme.text, borderColor: theme.border, backgroundColor: theme.inputBackground }]}
-        placeholder="Email"
+        placeholder={t('email')}
         placeholderTextColor={theme.textSecondary}
         autoCapitalize="none"
         keyboardType="email-address"
@@ -64,29 +67,23 @@ export const RegisterScreen = ({ onGoToLogin }: { onGoToLogin: () => void }) => 
       />
       <TextInput
         style={[styles.input, { color: theme.text, borderColor: theme.border, backgroundColor: theme.inputBackground }]}
-        placeholder="Password"
+        placeholder={t('password')}
         placeholderTextColor={theme.textSecondary}
         secureTextEntry
         value={password}
         onChangeText={setPassword}
       />
       <TouchableOpacity style={[styles.button, { backgroundColor: theme.primary }]} onPress={handleRegister} disabled={loading || !isOnline}>
-        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Register</Text>}
+        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>{t('register')}</Text>}
       </TouchableOpacity>
       <TouchableOpacity style={[styles.button, { backgroundColor: theme.cardBackground, marginTop: 8 }]} onPress={onGoToLogin}>
-        <Text style={[styles.buttonText, { color: theme.primary }]}>Already have an account? Login</Text>
+        <Text style={[styles.buttonText, { color: theme.primary }]}>{t('alreadyHaveAccount')}</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 24,
-  },
   title: {
     fontSize: 28,
     fontWeight: 'bold',

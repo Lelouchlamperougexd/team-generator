@@ -17,6 +17,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { DrawerNavigationProp } from '@react-navigation/drawer';
 import { RootStackParamList } from '../navigation/types';
 import { GuestBanner } from '../components/GuestBanner';
+import { useAuth } from '../auth/AuthContext';
+import { useNetworkStatus } from '../context/NetworkStatusContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { db } from '../firebase/config';
+import { ref, set, get } from 'firebase/database';
 
 type TeamGeneratorScreenProps = {
   navigation: DrawerNavigationProp<RootStackParamList, 'TeamGenerator'>;
@@ -34,6 +39,9 @@ export const TeamGeneratorScreen = ({ navigation }: TeamGeneratorScreenProps) =>
   const [numberOfTeams, setNumberOfTeams] = useState(2);
   const [teams, setTeams] = useState<string[][]>([]);
 
+  const { user } = useAuth();
+  const { isOnline } = useNetworkStatus();
+
   const handleAddName = () => {
     if (inputValue.trim()) {
       setNames([...names, inputValue.trim()]);
@@ -45,7 +53,7 @@ export const TeamGeneratorScreen = ({ navigation }: TeamGeneratorScreenProps) =>
     setNames(names.filter((_, i) => i !== index));
   };
 
-  const handleGenerateTeams = () => {
+  const handleGenerateTeams = async () => {
     if (names.length < numberOfTeams) {
       Alert.alert(
         t('error'),
@@ -63,6 +71,34 @@ export const TeamGeneratorScreen = ({ navigation }: TeamGeneratorScreenProps) =>
     });
 
     setTeams(newTeams);
+
+    // Save to local storage and Firebase with id, members, createdAt
+    const now = new Date().toISOString();
+    const teamsForHistory = newTeams.map((members, i) => ({
+      id: `${Date.now()}_${i}`,
+      members,
+      createdAt: now,
+    }));
+
+    // Save to AsyncStorage
+    const localState = {
+      items: names,
+      groups: numberOfTeams,
+      teams: newTeams,
+      updatedAt: now,
+      history: teamsForHistory,
+    };
+    await AsyncStorage.setItem('teamState', JSON.stringify(localState));
+
+    // Save to Firebase if online and user is logged in
+    if (isOnline && user) {
+      await set(ref(db, `users/${user.uid}/teams`), {
+        items: names,
+        groups: numberOfTeams,
+        teams: teamsForHistory,
+        updatedAt: now,
+      });
+    }
   };
 
   const handleClearAll = () => {

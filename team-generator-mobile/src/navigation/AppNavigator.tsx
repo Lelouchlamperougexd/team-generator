@@ -11,6 +11,7 @@ import { useLocalization } from '../i18n/useLocalization';
 import { Ionicons } from '@expo/vector-icons';
 import { Platform } from 'react-native';
 import { useAuth } from '../auth/AuthContext';
+import { HistoryScreen } from '../screens/HistoryScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -94,6 +95,16 @@ export const AppNavigator = () => {
             title: t('about'),
             drawerIcon: ({ color, size }) => (
               <Ionicons name="information-circle-outline" size={size} color={color} />
+            ),
+          }}
+        />
+        <Drawer.Screen 
+          name="History" 
+          component={HistoryScreen}
+          options={{
+            title: 'History',
+            drawerIcon: ({ color, size }) => (
+              <Ionicons name="time-outline" size={size} color={color} />
             ),
           }}
         />
